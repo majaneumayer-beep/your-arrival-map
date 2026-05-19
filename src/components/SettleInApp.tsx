@@ -510,8 +510,8 @@ function LoadingScreen() {
 
 // ---------------- App shell with tabs ----------------
 function AppShell({ tab, setTab, profile, roadmap, doneIds, toggleTask, onResetPersona, onSwitchPersona }: {
-  tab: "roadmap" | "housing" | "ask" | "profile" | "about";
-  setTab: (t: "roadmap" | "housing" | "ask" | "profile" | "about") => void;
+  tab: AppTab;
+  setTab: (t: AppTab) => void;
   profile: Profile;
   roadmap: ReturnType<typeof buildRoadmap>;
   doneIds: Set<number>;
@@ -523,7 +523,8 @@ function AppShell({ tab, setTab, profile, roadmap, doneIds, toggleTask, onResetP
     <>
       <div className="flex-1 overflow-y-auto pb-20 anim-fade-up" key={tab}>
         {tab === "roadmap" && <RoadmapTab profile={profile} roadmap={roadmap} doneIds={doneIds} toggleTask={toggleTask} />}
-        {tab === "housing" && <HousingTab profile={profile} />}
+        {tab === "map" && <MapTab profile={profile} />}
+        {tab === "housing" && <HousingTabEnhanced profile={profile} />}
         {tab === "ask" && <AskTab profile={profile} />}
         {tab === "profile" && <ProfileTab profile={profile} roadmap={roadmap} doneIds={doneIds} onAbout={() => setTab("about")} onReset={onResetPersona} onSwitchPersona={onSwitchPersona} />}
         {tab === "about" && <AboutScreen onBack={() => setTab("profile")} />}
