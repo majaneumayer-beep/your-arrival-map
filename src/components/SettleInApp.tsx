@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast, Toaster } from "sonner";
-import { PlaneLanding, MapPin, ArrowRight, ArrowLeft, Check, Lock, Search, Map as MapIcon, Home, MessageCircle, User, Calendar, Sparkles, Info, AlertTriangle, ShieldCheck, Send } from "lucide-react";
+import { PlaneLanding, MapPin, ArrowRight, ArrowLeft, Check, Lock, Search, Map as MapIcon, Home, MessageCircle, User, Calendar, Sparkles, Info, AlertTriangle, ShieldCheck, Send, Flag, Briefcase, FileText, KeyRound, Stethoscope, TrendingUp, CheckCircle2, Clock, Globe2, Settings, RotateCcw } from "lucide-react";
 import {
   NATIONALITIES, CITIES, type Nationality, type City, type Profile, type Purpose, type Housing, type StayLength,
   buildRoadmap, daysUntil, countdownTone, formatDate, arrivalMinusDays, gemeenteWait,
