@@ -65,17 +65,25 @@ export function calculateMonthlyCosts(profile: Profile): CostBreakdown {
     {
       id: "insurance",
       label: "Health insurance",
-      amount: healthInsurance,
+      amount: needsDutchInsurance ? 159 : 20,
       color: "teal",
-      note: needsDutchInsurance ? "basisverzekering avg 2026" : "Covered by EHIC — no Dutch insurance needed",
+      note: needsDutchInsurance
+        ? "basisverzekering avg 2026"
+        : "EHIC covers emergencies — schools recommend +€20/mo supplemental for full cover",
+    },
+    {
+      id: "bike",
+      label: "Bike (recommended 🚲)",
+      amount: 17,
+      color: "teal",
+      note: "Swapfiets Basic — swap if broken, no deposit",
     },
     {
       id: "transport",
-      label: "Transport",
-      amount: 35,
+      label: "Public transport (OV)",
+      amount: 40,
       color: "amber",
-      // Bike is the realistic default in NL — not OV
-      note: "Swapfiets Basic €17 or secondhand bike + occasional OV",
+      note: "OVpay — tap your bank card, ~€40/mo average use",
     },
     {
       id: "groceries",
