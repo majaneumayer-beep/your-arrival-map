@@ -192,18 +192,65 @@ function tasksForEUStudent(profile: Profile): Task[] {
   ];
 }
 
-function tasksForNonEUIntern(profile: Profile): Task[] {
+function tasksForEUWorker(profile: Profile): Task[] {
+  const isRotterdam = profile.city === "Rotterdam";
+  const isIntern = profile.purpose === "Internship or traineeship";
+  return [
+    { id: 1, title: `Find housing in ${profile.city}`, detail: "You need a confirmed address first. Confirm landlord allows gemeente registration.", tag: "First ⚡", tagTone: "amber", phase: "Before arrival", phaseTone: "amber" },
+    { id: 2, title: `Book ${profile.city} gemeente appointment`, detail: `${gemeenteWait(profile.city)} wait. ${isRotterdam ? "Book at rotterdam.nl before you fly — up to 4 weeks ahead." : "Book online before you fly."}`, tag: "Book now", tagTone: "teal", phase: "Before arrival", phaseTone: "amber", deps: [1] },
+    { id: 3, title: "Register employment with Belastingdienst", detail: `Your employer registers you for payroll tax. Confirm with HR that they've filed your details so your BSN links to wage tax (loonheffing) from day one.`, tag: isIntern ? "Via employer" : "Via employer", tagTone: "amber", phase: "Before arrival", phaseTone: "amber" },
+    { id: 4, title: "Arrange Dutch health insurance (mandatory when working)", detail: "Required within 4 months of starting paid work in NL — even as an EU citizen. Compare basisverzekering plans on zorgwijzer.nl (~€140/month). Fines apply for late enrollment.", tag: "Mandatory", tagTone: "red", phase: "Before arrival", phaseTone: "amber" },
+    { id: 5, title: `Register at ${profile.city} gemeente BRP`, detail: "Within 5 days of arrival — legally required. Fine up to €325 for late registration. BSN usually received at appointment.", tag: "Day 1–5", tagTone: "red", phase: "First week", phaseTone: "amber", deps: [1, 2] },
+    { id: 6, title: "Apply for DigiD", detail: "At digid.nl after your BSN. Activation letter by post in 3–5 working days to registered address — cannot be forwarded.", tag: "After BSN", tagTone: "teal", phase: "First week", phaseTone: "amber", deps: [5] },
+    { id: 7, title: "Open Dutch bank account", detail: "ING, ABN AMRO or Bunq. Bunq is fully digital — easiest for internationals. Needed for salary payment. Share IBAN with employer HR.", tag: "Needs BSN", tagTone: "teal", phase: "First month", phaseTone: "yellow", deps: [5] },
+    { id: 8, title: "Activate Dutch health insurance with BSN", detail: "Backdate policy to your arrival date. Bring BSN to your chosen insurer to finalize the basisverzekering.", tag: "Needs BSN", tagTone: "teal", phase: "First month", phaseTone: "yellow", deps: [5, 4] },
+    { id: 9, title: "OV public transport — use OVpay", detail: "Tap your bank card or phone on any NL transport. No extra card needed.", tag: "No extra card needed", tagTone: "teal", phase: "First month", phaseTone: "yellow" },
+    { id: 10, title: `Register with a huisarts (GP) in ${profile.city}`, detail: "Find one at huisartsenzoeken.nl. Bring your BSN.", tag: "Recommended", tagTone: "teal", phase: "First 3 months", phaseTone: "green", deps: [5] },
+    { id: 11, title: "Apply for zorgtoeslag if eligible", detail: "Now that you have Dutch health insurance, apply via belastingdienst.nl. Max €129/month in 2026. Income below €40,857/year. Can be backdated 3 months.", tag: "Up to €129/mo · optional", tagTone: "grey", phase: "First 3 months", phaseTone: "green", deps: [6, 7, 8], optional: true },
+    { id: 12, title: "Check 30% ruling eligibility", detail: "Highly skilled migrant tax benefit — your employer must apply within 4 months of your start date. Ask HR if you qualify.", tag: "Ask HR · optional", tagTone: "grey", phase: "First 3 months", phaseTone: "green", deps: [5], optional: true },
+  ];
+}
+
+function tasksForNonEUStudent(profile: Profile): Task[] {
   const arrivalDeadline = arrivalMinusDays(profile.arrivalISO, 5);
+  return [
+    { id: 1, title: `Find housing in ${profile.city}`, detail: `Must have confirmed address by ${arrivalDeadline} — 5 days before arrival. Confirm landlord allows gemeente registration at the address.`, tag: "First ⚡", tagTone: "amber", phase: "Before arrival — do today", phaseTone: "red" },
+    { id: 2, title: "University files entry visa (MVV) + residence permit at IND", detail: "Your university is your IND sponsor and files the application. Takes 2–4 weeks. Chase the international office now.", tag: "Today — critical 🔴", tagTone: "red", phase: "Before arrival — do today", phaseTone: "red" },
+    { id: 3, title: "Get international health insurance", detail: "Required for the residence permit application. Must be active before arrival. As a study-only student you cannot take Dutch public insurance.", tag: "Required", tagTone: "red", phase: "Before arrival — do today", phaseTone: "red" },
+    { id: 4, title: "Contact university international office for student registration days", detail: `${profile.city} regular gemeente wait is ${gemeenteWait(profile.city)}. Universities run special fast-track BRP days for new international students. Do NOT use regular gemeente.nl appointments.`, tag: "Today", tagTone: "amber", phase: "Before arrival — do today", phaseTone: "red", deps: [1] },
+    { id: 5, title: `Register at ${profile.city} gemeente BRP`, detail: "Within 5 days of arrival — legally required. Fine up to €325. Use university special registration days when available.", tag: "Day 1–5", tagTone: "red", phase: "First week", phaseTone: "amber", deps: [1, 4] },
+    { id: 6, title: "Collect residence permit from IND desk", detail: "Book IND appointment in advance. Bring passport + IND confirmation letter.", tag: "Pre-book IND", tagTone: "amber", phase: "First week", phaseTone: "amber", deps: [2] },
+    { id: 7, title: "Apply for DigiD", detail: "At digid.nl after BSN. Activation letter by post in 3–5 working days — cannot be forwarded.", tag: "After BSN", tagTone: "teal", phase: "First week", phaseTone: "amber", deps: [5] },
+    { id: 8, title: "Open Dutch bank account", detail: "Bunq recommended — fully digital, no branch visit needed. Needs BSN.", tag: "Needs BSN", tagTone: "teal", phase: "First month", phaseTone: "yellow", deps: [5] },
+    { id: 9, title: "TB examination at GGD " + profile.city, detail: `Mandatory for ${profile.nationality.adjective} nationals within 3 months of receiving residence permit. Simple chest x-ray. Only done by GGD — never a private clinic. Skipping this can cancel your permit.`, tag: "Mandatory", tagTone: "red", phase: "Within 3 months of permit — mandatory", phaseTone: "red", deps: [6] },
+    { id: 10, title: `Register with a huisarts (GP) in ${profile.city}`, detail: "Find one at huisartsenzoeken.nl.", tag: "Recommended", tagTone: "teal", phase: "Within 3 months of permit — mandatory", phaseTone: "red", deps: [5] },
+  ];
+}
+
+function tasksForNonEUWorker(profile: Profile): Task[] {
+  const arrivalDeadline = arrivalMinusDays(profile.arrivalISO, 5);
+  const isIntern = profile.purpose === "Internship or traineeship";
+  const reg4Title = isIntern
+    ? "Contact university international office (if applicable)"
+    : `Book gemeente BRP appointment at ${profile.city}.nl`;
+  const reg4Detail = isIntern
+    ? `If connected to a university, contact their international office for fast-track registration days. Otherwise, book a regular gemeente appointment — ${profile.city} wait is ${gemeenteWait(profile.city)}.`
+    : `Regular ${profile.city} gemeente wait is ${gemeenteWait(profile.city)}. Book online via the gemeente website before you fly so your slot lines up with the 5-day deadline.`;
+  const reg5Detail = isIntern
+    ? "Within 5 days of arrival — legally required. Fine up to €325. Use a university fast-track day if available, otherwise your booked gemeente appointment."
+    : "Within 5 days of arrival — legally required. Fine up to €325. Use your pre-booked gemeente appointment.";
   return [
     { id: 1, title: `Find housing in ${profile.city}`, detail: `Must have confirmed address by ${arrivalDeadline} — 5 days before arrival. Confirm landlord allows gemeente registration at the address.`, tag: "First ⚡", tagTone: "amber", phase: "Before arrival — do today", phaseTone: "red" },
     { id: 2, title: "Employer files GVVA permit at IND — TODAY", detail: "Takes 5–7 weeks. You arrive soon. You cannot apply yourself — employer must do this. IND only communicates with employer. Chase them now.", tag: "Today — critical 🔴", tagTone: "red", phase: "Before arrival — do today", phaseTone: "red" },
     { id: 3, title: "Get international health insurance", detail: "Required for the GVVA permit application. Must be active before arrival.", tag: "Required", tagTone: "red", phase: "Before arrival — do today", phaseTone: "red" },
-    { id: 4, title: "Contact university international office for student registration days", detail: `${profile.city} regular gemeente wait is ${gemeenteWait(profile.city)}. Universities run special fast-track days. Do NOT use regular gemeente.nl appointments.`, tag: "Today", tagTone: "amber", phase: "Before arrival — do today", phaseTone: "red", deps: [1] },
-    { id: 5, title: `Register at ${profile.city} gemeente BRP`, detail: "Within 5 days of arrival — legally required. Fine up to €325. Use university special registration days only.", tag: "Day 1–5", tagTone: "red", phase: "First week", phaseTone: "amber", deps: [1, 4] },
+    { id: 4, title: reg4Title, detail: reg4Detail, tag: "Today", tagTone: "amber", phase: "Before arrival — do today", phaseTone: "red", deps: [1] },
+    { id: 5, title: `Register at ${profile.city} gemeente BRP`, detail: reg5Detail, tag: "Day 1–5", tagTone: "red", phase: "First week", phaseTone: "amber", deps: [1, 4] },
     { id: 6, title: "Collect residence permit from IND desk", detail: "Book IND appointment in advance. Bring passport + IND confirmation letter.", tag: "Pre-book IND", tagTone: "amber", phase: "First week", phaseTone: "amber", deps: [2] },
     { id: 7, title: "Apply for DigiD", detail: "At digid.nl after BSN. Activation letter by post in 3–5 working days — cannot be forwarded.", tag: "After BSN", tagTone: "teal", phase: "First week", phaseTone: "amber", deps: [5] },
     { id: 8, title: "Open Dutch bank account", detail: "Bunq recommended — fully digital, no branch visit needed. Needs BSN.", tag: "Needs BSN", tagTone: "teal", phase: "First month", phaseTone: "yellow", deps: [5] },
-    { id: 9, title: "Dutch health insurance", detail: "Required ONLY if internship allowance is at or above €14.71/hour (minimum wage 2026). If below, international insurance is sufficient. Check with your employer.", tag: "Check with employer · optional", tagTone: "grey", phase: "First month", phaseTone: "yellow", deps: [5], optional: true },
+    { id: 9, title: "Dutch health insurance", detail: isIntern
+      ? "Required ONLY if internship allowance is at or above €14.71/hour (minimum wage 2026). If below, international insurance is sufficient. Check with your employer."
+      : "Mandatory within 4 months of starting paid work. Compare basisverzekering plans on zorgwijzer.nl (~€140/month).", tag: isIntern ? "Check with employer · optional" : "Mandatory", tagTone: isIntern ? "grey" : "red", phase: "First month", phaseTone: "yellow", deps: [5], optional: isIntern },
     { id: 10, title: "Apply for zorgtoeslag if eligible", detail: "Only if you have Dutch health insurance. Max €129/month in 2026. Income below €40,857/year. Needs BSN + DigiD + Dutch health insurance + Dutch bank.", tag: "Up to €129/mo · optional", tagTone: "grey", phase: "First month", phaseTone: "yellow", deps: [7, 8, 9], optional: true },
     { id: 11, title: "TB examination at GGD " + profile.city, detail: `Mandatory for ${profile.nationality.adjective} nationals within 3 months of receiving residence permit. Simple chest x-ray. Only done by GGD — never a private clinic. Skipping this can cancel your permit.`, tag: "Mandatory", tagTone: "red", phase: "Within 3 months of permit — mandatory", phaseTone: "red", deps: [6] },
     { id: 12, title: `Register with a huisarts (GP) in ${profile.city}`, detail: "Find one at huisartsenzoeken.nl.", tag: "Recommended", tagTone: "teal", phase: "Within 3 months of permit — mandatory", phaseTone: "red", deps: [5] },
@@ -213,11 +260,9 @@ function tasksForNonEUIntern(profile: Profile): Task[] {
 export function buildRoadmap(profile: Profile): Roadmap {
   const isEU = profile.nationality.group === 1;
   const isStudent = profile.purpose === "Full degree student" || profile.purpose === "Exchange semester";
-  const tasks = isEU && isStudent
-    ? tasksForEUStudent(profile)
-    : (!isEU && (profile.purpose === "Internship or traineeship" || profile.purpose === "Starting a job"))
-      ? tasksForNonEUIntern(profile)
-      : isEU ? tasksForEUStudent(profile) : tasksForNonEUIntern(profile);
+  const tasks = isEU
+    ? (isStudent ? tasksForEUStudent(profile) : tasksForEUWorker(profile))
+    : (isStudent ? tasksForNonEUStudent(profile) : tasksForNonEUWorker(profile));
 
   return {
     profile,
