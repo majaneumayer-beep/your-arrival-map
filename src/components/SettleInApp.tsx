@@ -640,7 +640,10 @@ function RoadmapTab({ profile, roadmap, doneIds, toggleTask }: {
           <Info size={13} className="inline mr-1.5 -mt-0.5" />{roadmap.notice}
         </div>
 
+        <CostCalculator profile={profile} />
+
         <div className="p-4 rounded-xl text-white" style={{ background: "var(--teal)" }}>
+
           <h3 className="text-[14px] font-medium">🎉 Events near you in {profile.city}</h3>
           <div className="mt-3 space-y-2">
             <div className="p-2.5 rounded-lg bg-white/10 text-[12px]">
