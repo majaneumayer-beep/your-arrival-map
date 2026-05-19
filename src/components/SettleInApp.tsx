@@ -8,6 +8,8 @@ import {
 } from "@/lib/settlein/data";
 import MapTab from "@/components/MapTab";
 import HousingTabEnhanced from "@/components/HousingTabEnhanced";
+import PulseCard from "@/components/PulseCard";
+import CostCalculator from "@/components/CostCalculator";
 
 type AppTab = "roadmap" | "map" | "housing" | "ask" | "profile" | "about";
 
