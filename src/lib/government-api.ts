@@ -81,9 +81,9 @@ export const QUICK_LINKS: { id: string; label: string; url: string; emoji: strin
   { id: "digid",        label: "Apply for DigiD",          url: "https://www.digid.nl/en/", emoji: "🔐" },
   { id: "duo-ov",       label: "DUO student OV card",      url: "https://duo.nl/particulier/geld-voor-school-en-studie/", emoji: "🚊" },
   { id: "zorgtoeslag",  label: "Zorgtoeslag (healthcare)", url: "https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/toeslagen", emoji: "💊" },
-  { id: "30ruling",     label: "30% ruling info",          url: "https://www.belastingdienst.nl/wps/wcm/connect/nl/30-procentsregeling/30-procentsregeling", emoji: "💼" },
+  { id: "30ruling",     label: "30% ruling info",          url: "https://www.belastingdienst.nl/wps/wcm/connect/nl/zoeken/zoeken?q=verzoek%20loonheffingen%20expatregeling%20(30%25-regeling)", emoji: "💼" },
   { id: "ns",           label: "NS train tickets",         url: "https://www.ns.nl/en", emoji: "🚆" },
-  { id: "swapfiets",    label: "Swapfiets bike rental",    url: "https://swapfiets.nl/en/offer", emoji: "🚲" },
+  { id: "swapfiets",    label: "Swapfiets bike rental",    url: "https://swapfiets.nl/en", emoji: "🚲" },
 ];
 
 // Universities per Dutch city — all institutions, not just Erasmus.
