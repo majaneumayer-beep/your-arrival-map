@@ -79,9 +79,9 @@ export const GOV_SERVICES: GovService[] = [
 export const QUICK_LINKS: { id: string; label: string; url: string; emoji: string }[] = [
   { id: "ind-appt",     label: "Book IND appointment",    url: "https://ind.nl/en/service-contact/make-an-appointment-with-the-ind", emoji: "🛂" },
   { id: "digid",        label: "Apply for DigiD",          url: "https://www.digid.nl/en/", emoji: "🔐" },
-  { id: "duo-ov",       label: "DUO student OV card",      url: "https://duo.nl/en/students/student-finance/ov-chip-card/", emoji: "🚊" },
-  { id: "zorgtoeslag",  label: "Zorgtoeslag (healthcare)", url: "https://www.belastingdienst.nl/wps/wcm/connect/en/benefits/benefits.html", emoji: "💊" },
-  { id: "30ruling",     label: "30% ruling info",          url: "https://www.government.nl/topics/income-tax/30-percent-facility-for-incoming-employees", emoji: "💼" },
+  { id: "duo-ov",       label: "DUO student OV card",      url: "https://duo.nl/particulier/geld-voor-school-en-studie/", emoji: "🚊" },
+  { id: "zorgtoeslag",  label: "Zorgtoeslag (healthcare)", url: "https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/toeslagen", emoji: "💊" },
+  { id: "30ruling",     label: "30% ruling info",          url: "https://www.belastingdienst.nl/wps/wcm/connect/nl/30-procentsregeling/30-procentsregeling", emoji: "💼" },
   { id: "ns",           label: "NS train tickets",         url: "https://www.ns.nl/en", emoji: "🚆" },
   { id: "swapfiets",    label: "Swapfiets bike rental",    url: "https://swapfiets.nl/en/offer", emoji: "🚲" },
 ];
