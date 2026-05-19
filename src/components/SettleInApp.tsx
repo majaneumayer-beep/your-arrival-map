@@ -879,64 +879,168 @@ function ProfileTab({ profile, roadmap, doneIds, onAbout, onReset, onSwitchPerso
   const longStay = profile.stay === ">1 year" || profile.purpose !== "Internship or traineeship";
   const registrationLabel = longStay ? "Gemeente BRP (4+ months)" : "RNI (under 4 months)";
 
+  const heroFrom = isEU ? "#0D9488" : "#BA7517";
+  const heroTo = isEU ? "#0F766E" : "#9A5A0F";
+  const heroGlow = isEU ? "#5EEAD4" : "#FCD34D";
+  const circumference = 2 * Math.PI * 52;
+  const dashOffset = circumference - (pct / 100) * circumference;
+
   return (
     <>
-      <div className="px-5 pt-8 pb-8 text-white relative overflow-hidden" style={{ background: isEU ? "var(--teal)" : "var(--amber-deep)" }}>
-        {/* subtle decorative circles */}
-        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full opacity-10" style={{ background: "white" }} />
-        <div className="absolute bottom-2 -left-8 w-24 h-24 rounded-full opacity-10" style={{ background: "white" }} />
+      {/* HERO */}
+      <div
+        className="relative px-5 pt-9 pb-20 text-white overflow-hidden"
+        style={{ background: `linear-gradient(135deg, ${heroFrom} 0%, ${heroTo} 100%)` }}
+      >
+        <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full blur-3xl opacity-40" style={{ background: heroGlow }} />
+        <div className="absolute -bottom-24 -left-20 w-72 h-72 rounded-full blur-3xl opacity-25" style={{ background: "#fff" }} />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "16px 16px" }}
+        />
 
-        <div className="relative flex items-center gap-3">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center text-[22px] font-semibold flex-shrink-0" style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(4px)" }}>
+        <div className="relative flex items-center gap-3.5 anim-fade-up">
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center text-[26px] font-semibold flex-shrink-0 ring-2 ring-white/30"
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12))",
+              backdropFilter: "blur(12px)",
+              boxShadow: "0 8px 24px -8px rgba(0,0,0,0.3)",
+            }}
+          >
             {profile.name.charAt(0)}
           </div>
-          <div>
-            <div className="flex items-center gap-2 text-[24px] font-semibold tracking-tight">
-              {profile.name} <span className="text-[20px]">{profile.nationality.flag}</span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 text-[26px] font-semibold tracking-tight leading-tight">
+              <span className="truncate">{profile.name}</span>
+              <span className="text-[22px] flex-shrink-0">{profile.nationality.flag}</span>
             </div>
-            <p className="text-[14px] text-white/90 mt-0.5 font-normal">{profile.city} · {profile.purpose} · {formatDate(profile.arrivalISO)}</p>
+            <p className="text-[13.5px] text-white/85 mt-1 font-normal flex items-center gap-1.5">
+              <MapPin size={12} className="opacity-90" />
+              <span className="truncate">{profile.city} · {profile.purpose}</span>
+            </p>
           </div>
+          <span
+            className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+            style={{ background: "rgba(255,255,255,0.22)", backdropFilter: "blur(6px)" }}
+          >
+            {isEU ? "EU" : "Non-EU"}
+          </span>
         </div>
 
-        <div className="text-center mt-6">
-          <div className="text-[48px] font-semibold leading-none">{pct}%</div>
-          <div className="text-[13px] text-white/85 mt-1.5 font-normal">Settled</div>
+        <div className="relative mt-7 flex flex-col items-center">
+          <div className="relative w-[140px] h-[140px]">
+            <svg className="absolute inset-0 -rotate-90" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,0.18)" strokeWidth="9" fill="none" />
+              <circle
+                cx="60" cy="60" r="52"
+                stroke="white" strokeWidth="9" fill="none" strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={dashOffset}
+                style={{ transition: "stroke-dashoffset 800ms cubic-bezier(.2,.7,.2,1)" }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-[40px] font-semibold leading-none tracking-tight">{pct}%</div>
+              <div className="text-[11px] text-white/80 uppercase tracking-wider mt-1">Settled</div>
+            </div>
+          </div>
+          <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-medium" style={{ background: "rgba(255,255,255,0.22)", backdropFilter: "blur(6px)" }}>
+            <Clock size={11} />
+            {days} days to arrival · {formatDate(profile.arrivalISO)}
+          </div>
         </div>
       </div>
 
-      <div className="px-5 -mt-4">
-        <div className="grid grid-cols-2 gap-2.5">
-          <Stat label="Steps done" value={`${done} of ${total}`} />
-          <Stat label="Days to arrival" value={`${days}`} />
-          <Stat label="Potential saving" value="€129/mo" sub="zorgtoeslag" />
-          <Stat label="TB test" value={tbExempt ? "Not required" : "Mandatory"} good={tbExempt} bad={!tbExempt} />
+      {/* STAT GRID overlapping */}
+      <div className="px-5 -mt-12 relative z-10">
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard icon={<CheckCircle2 size={15} />} label="Steps done" value={`${done}/${total}`} tint="#0D9488" />
+          <StatCard icon={<Calendar size={15} />} label="Arrival" value={`${days}d`} sub="until landing" tint="#F97316" />
+          <StatCard icon={<TrendingUp size={15} />} label="Saving" value="€129" sub="per month · zorgtoeslag" tint="#22C55E" />
+          <StatCard icon={<Stethoscope size={15} />} label="TB test" value={tbExempt ? "Exempt" : "Required"} tint={tbExempt ? "#22C55E" : "#E24B4A"} />
         </div>
 
-        <h3 className="text-[11px] uppercase tracking-wider mt-6 mb-2" style={{ color: "#64748B" }}>Your situation</h3>
-        <div className="rounded-xl divide-y" style={{ border: "0.5px solid #E2E8F0", borderColor: "#E2E8F0" }}>
-          <Row label="Nationality" value={`${profile.nationality.flag} ${profile.nationality.adjective}`} />
-          <Row label="City" value={profile.city} />
-          <Row label="Purpose" value={profile.purpose} />
-          <Row label="Registration" value={registrationLabel} />
-          <Row label="Housing" value={profile.housing === "sorted" ? "✅ Sorted" : profile.housing === "looking" ? "🔍 Looking" : "🏫 University"} />
-          <Row label="TB test required" value={tbExempt ? "No — exempt" : "Yes — within 3 months of permit"} />
+        <div className="mt-7 flex items-center justify-between">
+          <h3 className="text-[11px] uppercase tracking-[0.12em] font-semibold" style={{ color: "#64748B" }}>Your situation</h3>
+          <span className="text-[10px]" style={{ color: "#94A3B8" }}>Auto-detected</span>
+        </div>
+        <div
+          className="mt-2 rounded-2xl overflow-hidden bg-white"
+          style={{ border: "0.5px solid #E2E8F0", boxShadow: "0 1px 3px rgba(15,23,42,0.04)" }}
+        >
+          <SituationRow icon={<Flag size={14} />} label="Nationality" value={`${profile.nationality.flag} ${profile.nationality.adjective}`} />
+          <SituationRow icon={<MapPin size={14} />} label="City" value={profile.city} />
+          <SituationRow icon={<Briefcase size={14} />} label="Purpose" value={profile.purpose} />
+          <SituationRow icon={<FileText size={14} />} label="Registration" value={registrationLabel} />
+          <SituationRow icon={<KeyRound size={14} />} label="Housing" value={profile.housing === "sorted" ? "Sorted" : profile.housing === "looking" ? "Looking" : "University"} valueTone={profile.housing === "sorted" ? "good" : profile.housing === "looking" ? "warn" : "neutral"} />
+          <SituationRow icon={<Stethoscope size={14} />} label="TB test" value={tbExempt ? "No — exempt" : "Within 3 months"} valueTone={tbExempt ? "good" : "warn"} last />
         </div>
 
-        <div className="mt-5 space-y-2">
-          <button onClick={onAbout} className="w-full text-left px-4 py-3 rounded-xl text-[13.5px] flex items-center justify-between" style={{ border: "0.5px solid #E2E8F0" }}>
-            <span>About SettleIn</span><ArrowRight size={14} color="#64748B" />
+        <div className="mt-6 space-y-2.5 pb-2">
+          <button
+            onClick={onAbout}
+            className="w-full px-4 py-3.5 rounded-2xl text-[13.5px] font-medium flex items-center justify-between transition active:scale-[0.98] bg-white"
+            style={{ border: "0.5px solid #E2E8F0", boxShadow: "0 1px 3px rgba(15,23,42,0.04)" }}
+          >
+            <span className="flex items-center gap-2.5">
+              <span className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "var(--teal-soft)", color: "var(--teal)" }}>
+                <Globe2 size={15} />
+              </span>
+              <span style={{ color: "var(--navy)" }}>About SettleIn</span>
+            </span>
+            <ArrowRight size={14} color="#94A3B8" />
           </button>
-          <div className="flex gap-2">
-            <button onClick={() => onSwitchPersona(profile.name === "Maja" ? "valentina" : "maja")} className="flex-1 px-4 py-2.5 rounded-xl text-[12px]" style={{ border: "0.5px solid #E2E8F0", color: "#64748B" }}>
-              Switch to {profile.name === "Maja" ? "Valentina 🇧🇷" : "Maja 🇭🇺"}
+          <div className="grid grid-cols-2 gap-2.5">
+            <button
+              onClick={() => onSwitchPersona(profile.name === "Maja" ? "valentina" : "maja")}
+              className="px-3 py-3 rounded-2xl text-[12px] font-medium flex items-center justify-center gap-1.5 transition active:scale-[0.98] bg-white"
+              style={{ border: "0.5px solid #E2E8F0", color: "#475569" }}
+            >
+              <Sparkles size={12} />
+              Switch to {profile.name === "Maja" ? "Valentina" : "Maja"}
             </button>
-            <button onClick={onReset} className="flex-1 px-4 py-2.5 rounded-xl text-[12px]" style={{ border: "0.5px solid #E2E8F0", color: "#64748B" }}>
+            <button
+              onClick={onReset}
+              className="px-3 py-3 rounded-2xl text-[12px] font-medium flex items-center justify-center gap-1.5 transition active:scale-[0.98] bg-white"
+              style={{ border: "0.5px solid #E2E8F0", color: "#475569" }}
+            >
+              <RotateCcw size={12} />
               Start over
             </button>
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+function StatCard({ icon, label, value, sub, tint }: { icon: React.ReactNode; label: string; value: string; sub?: string; tint: string }) {
+  return (
+    <div
+      className="p-3.5 rounded-2xl bg-white transition active:scale-[0.98]"
+      style={{ border: "0.5px solid #E2E8F0", boxShadow: "0 4px 14px -8px rgba(15,23,42,0.12)" }}
+    >
+      <span className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${tint}1A`, color: tint }}>
+        {icon}
+      </span>
+      <div className="text-[10px] uppercase tracking-wider mt-2.5 font-medium" style={{ color: "#94A3B8" }}>{label}</div>
+      <div className="text-[18px] font-semibold mt-0.5 leading-tight" style={{ color: "var(--navy)" }}>{value}</div>
+      {sub && <div className="text-[10.5px] mt-0.5" style={{ color: "#94A3B8" }}>{sub}</div>}
+    </div>
+  );
+}
+
+function SituationRow({ icon, label, value, valueTone, last }: { icon: React.ReactNode; label: string; value: string; valueTone?: "good" | "warn" | "neutral"; last?: boolean }) {
+  const valueColor = valueTone === "good" ? "#15803D" : valueTone === "warn" ? "#9A3412" : "var(--navy)";
+  return (
+    <div className={`px-4 py-3 flex items-center gap-3 ${last ? "" : "border-b"}`} style={{ borderColor: "#F1F5F9" }}>
+      <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#F8FAFC", color: "#64748B" }}>
+        {icon}
+      </span>
+      <span className="text-[12.5px] flex-1" style={{ color: "#64748B" }}>{label}</span>
+      <span className="text-[13px] font-medium text-right" style={{ color: valueColor }}>{value}</span>
+    </div>
   );
 }
 
