@@ -597,6 +597,11 @@ function RoadmapTab({ profile, roadmap, doneIds, toggleTask }: {
           </span>
         </div>
 
+        <div className="mt-4">
+          <PulseCard profile={profile} roadmap={roadmap} doneIds={doneIds} />
+        </div>
+
+
         <div className="mt-4 p-4 rounded-xl" style={{ background: "var(--surface)", border: "0.5px solid #E2E8F0" }}>
           <div className="flex justify-between text-[12px]" style={{ color: "var(--navy)" }}>
             <span className="font-medium">{pct}% Settled</span>
