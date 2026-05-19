@@ -6,12 +6,16 @@ import {
   buildRoadmap, daysUntil, countdownTone, formatDate, arrivalMinusDays, gemeenteWait,
   PERSONA_MAJA, PERSONA_VALENTINA, DEMO_CHAT_MAJA, DEMO_CHAT_VALENTINA,
 } from "@/lib/settlein/data";
+import MapTab from "@/components/MapTab";
+import HousingTabEnhanced from "@/components/HousingTabEnhanced";
+
+type AppTab = "roadmap" | "map" | "housing" | "ask" | "profile" | "about";
 
 type Screen =
   | { kind: "welcome" }
   | { kind: "onboarding"; step: number }
   | { kind: "loading" }
-  | { kind: "app"; tab: "roadmap" | "housing" | "ask" | "profile" | "about" };
+  | { kind: "app"; tab: AppTab };
 
 type Draft = {
   nationality?: Nationality;
