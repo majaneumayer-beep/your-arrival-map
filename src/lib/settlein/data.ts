@@ -330,9 +330,31 @@ export function buildRoadmap(profile: Profile): Roadmap {
     ? (isStudent ? tasksForEUStudent(profile) : tasksForEUWorker(profile))
     : (isStudent ? tasksForNonEUStudent(profile) : tasksForNonEUWorker(profile));
 
+  const brpKey = isEU ? "brpEU" : "brpNonEU";
+  const docMap: Record<string, string> = {
+    [`Find housing in ${profile.city}`]: "housing",
+    [`Get EHIC card from ${profile.nationality.country}`]: "ehic",
+    [`Register at ${profile.city} gemeente BRP`]: brpKey,
+    "Apply for DigiD": "digid",
+    "Open Dutch bank account": "bank",
+    "Collect residence permit from IND desk": "ind",
+    "University files entry visa (MVV) + residence permit at IND": "ind",
+    "Employer files GVVA permit at IND — TODAY": "ind",
+    "Activate Dutch health insurance with BSN": "insurance",
+    "Arrange Dutch health insurance (mandatory when working)": "insurance",
+    "Dutch health insurance": "insurance",
+    "Register employment with Belastingdienst": "belastingdienst",
+    [`TB examination at GGD ${profile.city}`]: "tb",
+    [`Register with a huisarts (GP) in ${profile.city}`]: "huisarts",
+  };
+  const tasksWithDocs = tasks.map(t => {
+    const key = docMap[t.title];
+    return key && DOCS[key] ? { ...t, docs: DOCS[key] } : t;
+  });
+
   return {
     profile,
-    tasks,
+    tasks: tasksWithDocs,
     noticeTone: profile.nationality.tbExempt ? "green" : "red",
     notice: profile.nationality.tbExempt
       ? `No TB test required — ${profile.nationality.adjective} nationals are fully exempt (IND Appendix 7644).`
