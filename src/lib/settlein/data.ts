@@ -120,6 +120,8 @@ export type Profile = {
   housing: Housing;
 };
 
+export type TaskDoc = { id: string; label: string; critical?: boolean };
+
 export type Task = {
   id: number;
   title: string;
@@ -130,6 +132,70 @@ export type Task = {
   phaseTone: "amber" | "red" | "yellow" | "green";
   deps?: number[];
   optional?: boolean;
+  docs?: TaskDoc[];
+};
+
+const DOCS: Record<string, TaskDoc[]> = {
+  housing: [
+    { id: "id", label: "Valid passport or EU national ID", critical: true },
+    { id: "income", label: "Proof of income or funding (contract, scholarship letter)" },
+    { id: "deposit", label: "Funds for deposit (typically 1–2 months rent)" },
+    { id: "reference", label: "Previous landlord reference (if requested)" },
+  ],
+  ehic: [
+    { id: "id", label: "National ID from your home country", critical: true },
+    { id: "insuranceNo", label: "Home health-insurance member number", critical: true },
+  ],
+  brpEU: [
+    { id: "passport", label: "Valid passport or EU national ID", critical: true },
+    { id: "birth", label: "Birth certificate (original, recent)", critical: true },
+    { id: "rental", label: "Rental contract showing your NL address", critical: true },
+    { id: "enrollment", label: "University enrollment letter or employer contract" },
+    { id: "photos", label: "2 passport photos" },
+  ],
+  brpNonEU: [
+    { id: "passport", label: "Valid passport with MVV / entry visa sticker", critical: true },
+    { id: "birth", label: "Birth certificate — apostilled and translated", critical: true },
+    { id: "rental", label: "Rental contract showing your NL address", critical: true },
+    { id: "enrollment", label: "University enrollment letter or employer contract", critical: true },
+    { id: "photos", label: "2 passport photos" },
+  ],
+  ind: [
+    { id: "passport", label: "Valid passport", critical: true },
+    { id: "indLetter", label: "IND confirmation letter (V-number)", critical: true },
+    { id: "photos", label: "2 recent passport photos" },
+    { id: "fee", label: "Card / iDEAL for permit fee" },
+  ],
+  digid: [
+    { id: "bsn", label: "BSN number", critical: true },
+    { id: "address", label: "Registered NL address on BRP", critical: true },
+  ],
+  bank: [
+    { id: "bsn", label: "BSN number", critical: true },
+    { id: "id", label: "Valid passport or EU ID", critical: true },
+    { id: "address", label: "Proof of NL address (rental or BRP extract)", critical: true },
+  ],
+  insurance: [
+    { id: "bsn", label: "BSN number", critical: true },
+    { id: "id", label: "Valid passport or ID", critical: true },
+    { id: "iban", label: "Dutch IBAN for direct debit" },
+    { id: "startDate", label: "Confirmed NL arrival / start-work date", critical: true },
+  ],
+  tb: [
+    { id: "passport", label: "Valid passport", critical: true },
+    { id: "permit", label: "Residence permit or IND sticker", critical: true },
+    { id: "indLetter", label: "IND TB referral form (Appendix TB)" },
+  ],
+  huisarts: [
+    { id: "bsn", label: "BSN number", critical: true },
+    { id: "insurance", label: "Health-insurance card (EHIC or Dutch policy)", critical: true },
+    { id: "id", label: "Valid passport or ID" },
+  ],
+  belastingdienst: [
+    { id: "bsn", label: "BSN number", critical: true },
+    { id: "contract", label: "Signed employer contract", critical: true },
+    { id: "iban", label: "Dutch IBAN for salary" },
+  ],
 };
 
 export type Roadmap = {
