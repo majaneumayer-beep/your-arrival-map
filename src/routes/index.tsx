@@ -1,26 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import SettleInApp from "@/components/SettleInApp";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "SettleIn — Your personal relocation roadmap" },
+      { name: "description", content: "Moving to the Netherlands? SettleIn builds your personal relocation roadmap in 2 minutes — BSN, DigiD, housing, permits." },
+      { property: "og:title", content: "SettleIn — Don't just move. Arrive." },
+      { property: "og:description", content: "Your personal relocation roadmap for the Netherlands in 2 minutes." },
+    ],
+  }),
+  component: SettleInApp,
 });
-
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
-}
