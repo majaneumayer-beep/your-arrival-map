@@ -41,7 +41,7 @@ export default function HousingTabEnhanced({ profile }: { profile: Profile }) {
             <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
             <div>
               You need a confirmed address by <strong>{deadline}</strong>. {profile.city} gemeente wait is <strong>{gemeenteWait(profile.city)}</strong> — book before you leave.
-              {isAmsterdam && <div className="mt-1.5">Contact your university international office for special registration days.</div>}
+              {isAmsterdam && (profile.purpose === "Full degree student" || profile.purpose === "Exchange semester") && <div className="mt-1.5">Contact your university international office for special student registration days — do NOT use regular gemeente.nl appointments.</div>}
             </div>
           </div>
         </div>
