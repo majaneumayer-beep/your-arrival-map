@@ -52,16 +52,6 @@ export const HOUSING_PLATFORMS: HousingPlatform[] = [
     pros: ["Most complete market view", "Trusted agencies", "Detailed listings"],
     cons: ["Mostly Dutch interface", "Strict income checks", "Fast-moving market"],
   },
-  {
-    id: "facebook",
-    name: "Facebook groups",
-    url: "https://www.facebook.com/groups/search/groups_home/?q=rotterdam%20housing",
-    trust: "risky",
-    description: "Expat and Erasmus housing groups per city.",
-    bestFor: "Last-minute rooms and sublets.",
-    pros: ["Free", "Direct contact", "Subletters often flexible"],
-    cons: ["High scam rate", "No protection", "Never pay before viewing"],
-  },
 ];
 
 export type Neighborhood = { name: string; vibe: string; priceBand: "€" | "€€" | "€€€" };
