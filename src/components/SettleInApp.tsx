@@ -8,6 +8,8 @@ import {
 } from "@/lib/settlein/data";
 import MapTab from "@/components/MapTab";
 import HousingTabEnhanced from "@/components/HousingTabEnhanced";
+import PulseCard from "@/components/PulseCard";
+import CostCalculator from "@/components/CostCalculator";
 
 type AppTab = "roadmap" | "map" | "housing" | "ask" | "profile" | "about";
 
@@ -595,6 +597,11 @@ function RoadmapTab({ profile, roadmap, doneIds, toggleTask }: {
           </span>
         </div>
 
+        <div className="mt-4">
+          <PulseCard profile={profile} roadmap={roadmap} doneIds={doneIds} />
+        </div>
+
+
         <div className="mt-4 p-4 rounded-xl" style={{ background: "var(--surface)", border: "0.5px solid #E2E8F0" }}>
           <div className="flex justify-between text-[12px]" style={{ color: "var(--navy)" }}>
             <span className="font-medium">{pct}% Settled</span>
@@ -633,7 +640,10 @@ function RoadmapTab({ profile, roadmap, doneIds, toggleTask }: {
           <Info size={13} className="inline mr-1.5 -mt-0.5" />{roadmap.notice}
         </div>
 
+        <CostCalculator profile={profile} />
+
         <div className="p-4 rounded-xl text-white" style={{ background: "var(--teal)" }}>
+
           <h3 className="text-[14px] font-medium">🎉 Events near you in {profile.city}</h3>
           <div className="mt-3 space-y-2">
             <div className="p-2.5 rounded-lg bg-white/10 text-[12px]">
