@@ -658,6 +658,36 @@ function PhaseHeader({ title, tone }: { title: string; tone: "amber" | "red" | "
   </div>;
 }
 
+const DOCS_STORAGE_KEY = "settlein.docs.v1";
+type DocsState = Record<string, Record<string, boolean>>;
+function loadDocsState(): DocsState {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(localStorage.getItem(DOCS_STORAGE_KEY) || "{}"); } catch { return {}; }
+}
+function saveDocsState(s: DocsState) {
+  try { localStorage.setItem(DOCS_STORAGE_KEY, JSON.stringify(s)); } catch {}
+}
+
+function printDocChecklist(task: { id: number; title: string; docs?: { id: string; label: string; critical?: boolean }[] }, checked: Record<string, boolean>) {
+  if (!task.docs || typeof window === "undefined") return;
+  const w = window.open("", "_blank", "width=600,height=800");
+  if (!w) return;
+  const rows = task.docs.map(d => `
+    <li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #E2E8F0;">
+      <span style="display:inline-block;width:14px;height:14px;border:1.5px solid #94A3B8;border-radius:3px;flex-shrink:0;margin-top:2px;">${checked[d.id] ? "✓" : ""}</span>
+      <span style="flex:1;font-size:13px;color:#0F172A;">
+        ${d.label}${d.critical ? ' <span style="color:#DC2626;font-size:11px;font-weight:600;">• required</span>' : ""}
+      </span>
+    </li>`).join("");
+  w.document.write(`<!doctype html><html><head><title>${task.title} — documents</title>
+    <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:32px;max-width:540px;margin:0 auto;color:#0F172A;}
+    h1{font-size:18px;margin:0 0 4px;}p{font-size:12px;color:#64748B;margin:0 0 18px;}ul{list-style:none;padding:0;margin:0;}
+    @media print{body{padding:16px;}}</style></head><body>
+    <h1>${task.title}</h1><p>Bring these documents — SettleIn checklist</p><ul>${rows}</ul>
+    <script>window.onload=()=>{window.print();}</script></body></html>`);
+  w.document.close();
+}
+
 function TaskCard({ task, done, locked, blockedBy, onToggle }: {
   task: ReturnType<typeof buildRoadmap>["tasks"][number];
   done: boolean;
@@ -670,6 +700,21 @@ function TaskCard({ task, done, locked, blockedBy, onToggle }: {
     : task.tagTone === "green" ? { bg: "#DCFCE7", fg: "#14532D" }
     : task.tagTone === "grey" ? { bg: "#F1F5F9", fg: "#475569" }
     : { bg: "var(--teal-soft)", fg: "#115E59" };
+
+  const [expanded, setExpanded] = useState(false);
+  const [docsState, setDocsState] = useState<DocsState>(() => loadDocsState());
+  const taskDocs = docsState[String(task.id)] || {};
+  const docCount = task.docs?.length ?? 0;
+  const readyCount = task.docs?.filter(d => taskDocs[d.id]).length ?? 0;
+
+  const toggleDoc = (docId: string) => {
+    const next: DocsState = {
+      ...docsState,
+      [String(task.id)]: { ...taskDocs, [docId]: !taskDocs[docId] },
+    };
+    setDocsState(next);
+    saveDocsState(next);
+  };
 
   return (
     <div className="p-3.5 rounded-xl flex gap-3" style={{
@@ -689,7 +734,10 @@ function TaskCard({ task, done, locked, blockedBy, onToggle }: {
       >
         {locked ? <Lock size={11} color="#94A3B8" /> : done ? <Check size={13} color="white" strokeWidth={3} /> : null}
       </button>
-      <div className="flex-1 min-w-0">
+      <div
+        className="flex-1 min-w-0 cursor-pointer"
+        onClick={() => setExpanded(v => !v)}
+      >
         <div className="flex items-start justify-between gap-2">
           <h4 className="text-[13.5px] font-medium leading-snug" style={{
             color: done ? "#94A3B8" : "var(--navy)",
@@ -706,6 +754,70 @@ function TaskCard({ task, done, locked, blockedBy, onToggle }: {
           </p>
         )}
         {task.optional && <p className="text-[10px] mt-1" style={{ color: "#94A3B8" }}>Optional</p>}
+
+        {docCount > 0 && !expanded && (
+          <div className="mt-2 flex items-center gap-1.5 text-[11px]" style={{ color: "#64748B" }}>
+            <FileText size={11} />
+            <span>{readyCount} of {docCount} documents ready</span>
+            <span style={{ color: "var(--teal)" }}>· tap to view</span>
+          </div>
+        )}
+
+        {docCount > 0 && expanded && (
+          <div className="mt-2.5 pt-2.5" style={{ borderTop: "0.5px solid #E2E8F0" }} onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "#64748B" }}>
+                Documents · {readyCount}/{docCount}
+              </div>
+              <button
+                onClick={() => printDocChecklist(task, taskDocs)}
+                className="text-[11px] px-2 py-0.5 rounded-md"
+                style={{ background: "var(--teal-soft)", color: "#115E59" }}
+              >
+                🖨️ Print list
+              </button>
+            </div>
+            <ul className="space-y-1.5">
+              {task.docs!.map(d => {
+                const checked = !!taskDocs[d.id];
+                return (
+                  <li key={d.id}>
+                    <button
+                      onClick={() => toggleDoc(d.id)}
+                      className="w-full flex items-start gap-2 text-left py-1"
+                    >
+                      <span
+                        className="w-4 h-4 rounded-sm flex-shrink-0 flex items-center justify-center mt-0.5"
+                        style={{
+                          background: checked ? "var(--teal)" : "white",
+                          border: checked ? "1.5px solid var(--teal)" : "1.5px solid #CBD5E1",
+                        }}
+                      >
+                        {checked && <Check size={11} color="white" strokeWidth={3} />}
+                      </span>
+                      <span className="text-[12px] leading-snug flex-1" style={{
+                        color: checked ? "#94A3B8" : "var(--navy)",
+                        textDecoration: checked ? "line-through" : "none",
+                      }}>
+                        {d.label}
+                        {d.critical && (
+                          <span
+                            className="inline-block w-1.5 h-1.5 rounded-full ml-1.5 -mt-0.5 align-middle"
+                            style={{ background: "#DC2626" }}
+                            aria-label="Required"
+                          />
+                        )}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="text-[10px] mt-2" style={{ color: "#94A3B8" }}>
+              <span className="inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle" style={{ background: "#DC2626" }} /> = legally required
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
