@@ -1110,9 +1110,10 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
 }
 
 // ---------------- Bottom nav ----------------
-function BottomNav({ tab, setTab }: { tab: "roadmap" | "housing" | "ask" | "profile" | "about"; setTab: (t: "roadmap" | "housing" | "ask" | "profile" | "about") => void }) {
+function BottomNav({ tab, setTab }: { tab: AppTab; setTab: (t: AppTab) => void }) {
   const items = [
     { id: "roadmap" as const, label: "Roadmap", icon: MapIcon },
+    { id: "map" as const, label: "Map", icon: MapPin },
     { id: "housing" as const, label: "Housing", icon: Home },
     { id: "ask" as const, label: "Ask", icon: MessageCircle },
     { id: "profile" as const, label: "Profile", icon: User },
