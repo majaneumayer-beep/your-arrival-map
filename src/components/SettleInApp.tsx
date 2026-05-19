@@ -432,10 +432,15 @@ function StepPurpose({ draft, setDraft }: { draft: Draft; setDraft: (d: Draft) =
 }
 
 function StepHousing({ draft, setDraft }: { draft: Draft; setDraft: (d: Draft) => void }) {
+  const isStudent = draft.purpose === "Full degree student" || draft.purpose === "Exchange semester";
+  const isIntern = draft.purpose === "Internship or traineeship";
+  const isJobStarter = draft.purpose === "Starting a job";
+
   const opts: { v: Housing; label: string }[] = [
     { v: "sorted", label: "✅ Yes, all sorted" },
     { v: "looking", label: "🔍 No, still looking" },
-    { v: "university", label: "🏫 University arranges it" },
+    ...(isStudent ? [{ v: "university" as Housing, label: "🏫 University arranges it" }] : []),
+    ...(isIntern ? [{ v: "university" as Housing, label: "🏢 Employer / university arranges it" }] : []),
   ];
   return (
     <div>
@@ -1198,15 +1203,16 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
         <ArrowLeft size={12} className="inline mr-1" />Back
       </button>
       <h1 className="text-[22px] font-medium" style={{ color: "var(--navy)" }}>About SettleIn</h1>
-      <p className="text-[13px] mt-2" style={{ color: "#64748B" }}>Don't just move. Arrive.</p>
+      <p className="text-[13px] mt-2" style={{ color: "#64748B" }}>Your personal relocation roadmap for the Netherlands.</p>
 
       <section className="mt-6">
         <h2 className="text-[11px] uppercase tracking-wider mb-2" style={{ color: "#94A3B8" }}>Business model</h2>
         <ul className="space-y-2 text-[13px]" style={{ color: "var(--navy)" }}>
           <li><strong>Free for users</strong> — always.</li>
-          <li><strong>Universities</strong> — €5–10k/year licensing per institution.</li>
-          <li><strong>Employer & internship partnerships</strong> — €15 per intern.</li>
-          <li><strong>Affiliate referrals</strong> — HousingAnywhere, Kamernet, Bunq, insurance providers.</li>
+          <li><strong>Universities</strong> — €8–15k/year licensing per institution. The Netherlands has 36 universities of applied sciences and 14 research universities — that's a €700k+ addressable market in NL alone.</li>
+          <li><strong>Employer partnerships</strong> — €49 per relocated hire. Average company relocates 10–50 people/year.</li>
+          <li><strong>Affiliate referrals</strong> — HousingAnywhere (~€30/booking), Bunq (~€20/signup), insurance providers (~€40/policy).</li>
+          <li><strong>B2B SaaS</strong> — white-label dashboard for HR teams at €199/mo per company.</li>
         </ul>
       </section>
 

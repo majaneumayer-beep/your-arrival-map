@@ -63,9 +63,12 @@ export default function HousingTabEnhanced({ profile }: { profile: Profile }) {
         <div>
           <h2 className="text-[13px] font-medium mb-2" style={{ color: "var(--navy)" }}>Where to search</h2>
           <div className="space-y-2.5">
-            {HOUSING_PLATFORMS.map(p => (
-              <PlatformCard key={p.id} platform={p} open={openPlatform === p.id} onToggle={() => setOpenPlatform(openPlatform === p.id ? null : p.id)} />
-            ))}
+            {HOUSING_PLATFORMS.map(p => {
+              const platform = p.id === "facebook"
+                ? { ...p, url: `https://www.facebook.com/groups/search/groups_home/?q=${encodeURIComponent(profile.city.toLowerCase() + " housing")}` }
+                : p;
+              return <PlatformCard key={p.id} platform={platform} open={openPlatform === p.id} onToggle={() => setOpenPlatform(openPlatform === p.id ? null : p.id)} />;
+            })}
           </div>
         </div>
 
