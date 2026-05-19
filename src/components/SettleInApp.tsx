@@ -6,12 +6,16 @@ import {
   buildRoadmap, daysUntil, countdownTone, formatDate, arrivalMinusDays, gemeenteWait,
   PERSONA_MAJA, PERSONA_VALENTINA, DEMO_CHAT_MAJA, DEMO_CHAT_VALENTINA,
 } from "@/lib/settlein/data";
+import MapTab from "@/components/MapTab";
+import HousingTabEnhanced from "@/components/HousingTabEnhanced";
+
+type AppTab = "roadmap" | "map" | "housing" | "ask" | "profile" | "about";
 
 type Screen =
   | { kind: "welcome" }
   | { kind: "onboarding"; step: number }
   | { kind: "loading" }
-  | { kind: "app"; tab: "roadmap" | "housing" | "ask" | "profile" | "about" };
+  | { kind: "app"; tab: AppTab };
 
 type Draft = {
   nationality?: Nationality;
@@ -506,8 +510,8 @@ function LoadingScreen() {
 
 // ---------------- App shell with tabs ----------------
 function AppShell({ tab, setTab, profile, roadmap, doneIds, toggleTask, onResetPersona, onSwitchPersona }: {
-  tab: "roadmap" | "housing" | "ask" | "profile" | "about";
-  setTab: (t: "roadmap" | "housing" | "ask" | "profile" | "about") => void;
+  tab: AppTab;
+  setTab: (t: AppTab) => void;
   profile: Profile;
   roadmap: ReturnType<typeof buildRoadmap>;
   doneIds: Set<number>;
@@ -519,7 +523,8 @@ function AppShell({ tab, setTab, profile, roadmap, doneIds, toggleTask, onResetP
     <>
       <div className="flex-1 overflow-y-auto pb-20 anim-fade-up" key={tab}>
         {tab === "roadmap" && <RoadmapTab profile={profile} roadmap={roadmap} doneIds={doneIds} toggleTask={toggleTask} />}
-        {tab === "housing" && <HousingTab profile={profile} />}
+        {tab === "map" && <MapTab profile={profile} />}
+        {tab === "housing" && <HousingTabEnhanced profile={profile} />}
         {tab === "ask" && <AskTab profile={profile} />}
         {tab === "profile" && <ProfileTab profile={profile} roadmap={roadmap} doneIds={doneIds} onAbout={() => setTab("about")} onReset={onResetPersona} onSwitchPersona={onSwitchPersona} />}
         {tab === "about" && <AboutScreen onBack={() => setTab("profile")} />}
@@ -1105,9 +1110,10 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
 }
 
 // ---------------- Bottom nav ----------------
-function BottomNav({ tab, setTab }: { tab: "roadmap" | "housing" | "ask" | "profile" | "about"; setTab: (t: "roadmap" | "housing" | "ask" | "profile" | "about") => void }) {
+function BottomNav({ tab, setTab }: { tab: AppTab; setTab: (t: AppTab) => void }) {
   const items = [
     { id: "roadmap" as const, label: "Roadmap", icon: MapIcon },
+    { id: "map" as const, label: "Map", icon: MapPin },
     { id: "housing" as const, label: "Housing", icon: Home },
     { id: "ask" as const, label: "Ask", icon: MessageCircle },
     { id: "profile" as const, label: "Profile", icon: User },
