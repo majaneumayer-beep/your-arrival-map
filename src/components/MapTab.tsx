@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { MapPin, ExternalLink, ChevronDown } from "lucide-react";
 import type { Profile } from "@/lib/settlein/data";
 import { CITY_POIS, POI_CATEGORIES, googleMapsDirections, googleMapsSearch, type POICategory, type POI } from "@/lib/maps";
@@ -35,13 +35,16 @@ export default function MapTab({ profile }: { profile: Profile }) {
   const isStudent = profile.purpose === "Full degree student" || profile.purpose === "Exchange semester";
   const isWorker = !isStudent;
 
+  // Reset filter if it was on university and user is a worker
+  useEffect(() => {
+    if (isWorker && filter === "university") setFilter("all");
+  }, [profile.purpose]);
+
   const pois = (CITY_POIS[profile.city] ?? []).filter(p => {
-    // Hide university pins for job starters — not relevant
     if (isWorker && p.category === "university") return false;
     return true;
   });
 
-  // Hide university filter chip for job starters
   const visibleCategories = POI_CATEGORIES.filter(c => {
     if (isWorker && c.id === "university") return false;
     return true;

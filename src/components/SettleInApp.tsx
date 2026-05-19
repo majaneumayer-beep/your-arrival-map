@@ -188,28 +188,28 @@ function WelcomeScreen({ onStart, onMaja, onValentina }: { onStart: () => void; 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 anim-fade-up"
       style={{ background: "linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 60%)" }}>
-      <div className="w-[38px] h-[38px] rounded-[10px] flex items-center justify-center mb-4" style={{ background: "var(--teal)" }}>
-        <PlaneLanding size={20} color="white" strokeWidth={2.25} />
-      </div>
-      <h1 className="text-[20px] font-medium tracking-tight" style={{ color: "var(--navy)" }}>SettleIn</h1>
-      <p className="text-[13px] mt-1" style={{ color: "#64748B" }}>New country. Zero stress.</p>
-      <p className="text-[11px] italic mt-0.5" style={{ color: "#94A3B8" }}>Don't just move. Arrive.</p>
 
-      <div className="w-12 h-12 rounded-full flex items-center justify-center my-8 anim-pop" style={{ background: "var(--teal-soft)" }}>
-        <MapPin size={22} color="var(--teal)" strokeWidth={2.25} />
+      {/* Big logo */}
+      <div className="w-24 h-24 rounded-[28px] flex items-center justify-center mb-5 anim-pop shadow-lg"
+        style={{ background: "linear-gradient(135deg, #0D9488 0%, #0F766E 100%)" }}>
+        <PlaneLanding size={44} color="white" strokeWidth={2} />
       </div>
+
+      <h1 className="text-[28px] font-semibold tracking-tight" style={{ color: "var(--navy)" }}>SettleIn</h1>
+      <p className="text-[15px] mt-1" style={{ color: "#64748B" }}>New country. Zero stress.</p>
+      <p className="text-[12px] italic mt-0.5" style={{ color: "#94A3B8" }}>Don't just move. Arrive.</p>
 
       <button
         onClick={onStart}
-        className="w-full max-w-[320px] h-12 rounded-lg text-white text-[14px] font-medium transition active:scale-[0.98] shadow-sm"
-        style={{ background: "var(--teal)" }}
-      >Get started</button>
+        className="w-full max-w-[320px] h-13 rounded-xl text-white text-[15px] font-semibold transition active:scale-[0.98] shadow-md mt-10"
+        style={{ background: "var(--teal)", height: "52px" }}
+      >Get started →</button>
       <p className="text-[11px] mt-2.5" style={{ color: "#94A3B8" }}>Your personal roadmap in 2 minutes</p>
 
-      <div className="mt-12 w-full max-w-[320px] flex flex-col gap-2">
+      <div className="mt-10 w-full max-w-[320px] flex flex-col gap-2">
         <p className="text-[10px] uppercase tracking-wider text-center" style={{ color: "#94A3B8" }}>Demo personas</p>
-        <button onClick={onMaja} className="text-[12px] py-2 rounded-md border" style={{ borderColor: "#E2E8F0", color: "#64748B" }}>Try as Maja 🇭🇺 (EU · 89 days)</button>
-        <button onClick={onValentina} className="text-[12px] py-2 rounded-md border" style={{ borderColor: "#E2E8F0", color: "#64748B" }}>Try as Valentina 🇧🇷 (non-EU · 28 days)</button>
+        <button onClick={onMaja} className="text-[12px] py-2.5 rounded-xl border font-medium" style={{ borderColor: "#E2E8F0", color: "#64748B" }}>Try as Maja 🇭🇺 (EU · 89 days)</button>
+        <button onClick={onValentina} className="text-[12px] py-2.5 rounded-xl border font-medium" style={{ borderColor: "#E2E8F0", color: "#64748B" }}>Try as Valentina 🇧🇷 (non-EU · 28 days)</button>
       </div>
     </div>
   );
