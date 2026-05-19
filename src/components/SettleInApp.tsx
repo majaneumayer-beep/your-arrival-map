@@ -138,7 +138,12 @@ export default function SettleInApp() {
                   housing: draft.housing!,
                 };
                 setProfile(p);
-                setDoneIds(new Set());
+                // Pre-tick task 1 (Find housing) if already sorted or university arranged
+                const initialDone = new Set<number>();
+                if (draft.housing === "sorted" || draft.housing === "university") {
+                  initialDone.add(1);
+                }
+                setDoneIds(initialDone);
                 setScreen({ kind: "loading" });
                 setTimeout(() => setScreen({ kind: "app", tab: "roadmap" }), 3000);
               } else {
