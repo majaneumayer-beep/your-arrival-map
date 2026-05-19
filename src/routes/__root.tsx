@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "SettleIn" },
+      { name: "description", content: "Your personal relocation roadmap for the Netherlands. BSN, DigiD, housing, permits , all in one place." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "SettleIn" },
+      { property: "og:description", content: "Your personal relocation roadmap for the Netherlands. BSN, DigiD, housing, permits , all in one place." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "SettleIn" },
+      { name: "twitter:description", content: "Your personal relocation roadmap for the Netherlands. BSN, DigiD, housing, permits , all in one place." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a425819-c255-4ed8-92e6-04e898ba6fdd/id-preview-8b34d4d2--2d431768-5c42-418d-aebf-74c91ddd3de7.lovable.app-1779185415717.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1a425819-c255-4ed8-92e6-04e898ba6fdd/id-preview-8b34d4d2--2d431768-5c42-418d-aebf-74c91ddd3de7.lovable.app-1779185415717.png" },
     ],
     links: [
       {
