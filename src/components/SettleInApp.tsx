@@ -197,14 +197,13 @@ function WelcomeScreen({ onStart, onMaja, onValentina }: { onStart: () => void; 
 
       <h1 className="text-[28px] font-semibold tracking-tight" style={{ color: "var(--navy)" }}>SettleIn</h1>
       <p className="text-[15px] mt-1" style={{ color: "#64748B" }}>New country. Zero stress.</p>
-      <p className="text-[12px] italic mt-0.5" style={{ color: "#94A3B8" }}>Don't just move. Arrive.</p>
 
       <button
         onClick={onStart}
         className="w-full max-w-[320px] h-13 rounded-xl text-white text-[15px] font-semibold transition active:scale-[0.98] shadow-md mt-10"
         style={{ background: "var(--teal)", height: "52px" }}
       >Get started →</button>
-      <p className="text-[11px] mt-2.5" style={{ color: "#94A3B8" }}>Your personal roadmap in 2 minutes</p>
+      <p className="text-[11px] mt-2.5" style={{ color: "#94A3B8" }}>Your personal roadmap in 5 minutes</p>
 
       <div className="mt-10 w-full max-w-[320px] flex flex-col gap-2">
         <p className="text-[10px] uppercase tracking-wider text-center" style={{ color: "#94A3B8" }}>Demo personas</p>
