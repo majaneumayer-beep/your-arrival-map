@@ -32,7 +32,21 @@ export default function MapTab({ profile }: { profile: Profile }) {
   const [filter, setFilter] = useState<POICategory | "all">("all");
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const pois = CITY_POIS[profile.city] ?? [];
+  const isStudent = profile.purpose === "Full degree student" || profile.purpose === "Exchange semester";
+  const isWorker = !isStudent;
+
+  const pois = (CITY_POIS[profile.city] ?? []).filter(p => {
+    // Hide university pins for job starters — not relevant
+    if (isWorker && p.category === "university") return false;
+    return true;
+  });
+
+  // Hide university filter chip for job starters
+  const visibleCategories = POI_CATEGORIES.filter(c => {
+    if (isWorker && c.id === "university") return false;
+    return true;
+  });
+
   const filtered = useMemo(() => filter === "all" ? pois : pois.filter(p => p.category === filter), [pois, filter]);
 
   return (
@@ -52,7 +66,7 @@ export default function MapTab({ profile }: { profile: Profile }) {
           <>
             <div className="flex gap-1.5 overflow-x-auto -mx-5 px-5 pb-1">
               <FilterChip active={filter === "all"} onClick={() => setFilter("all")} label="All" emoji="📍" />
-              {POI_CATEGORIES.map(c => (
+              {visibleCategories.map(c => (
                 <FilterChip key={c.id} active={filter === c.id} onClick={() => setFilter(c.id)} label={c.label} emoji={c.emoji} />
               ))}
             </div>
