@@ -881,14 +881,26 @@ function ProfileTab({ profile, roadmap, doneIds, onAbout, onReset, onSwitchPerso
 
   return (
     <>
-      <div className="px-5 pt-10 pb-6 text-white" style={{ background: isEU ? "var(--teal)" : "var(--amber-deep)" }}>
-        <div className="flex items-center gap-2 text-[16px] font-medium">
-          {profile.name} <span>{profile.nationality.flag}</span>
+      <div className="px-5 pt-8 pb-8 text-white relative overflow-hidden" style={{ background: isEU ? "var(--teal)" : "var(--amber-deep)" }}>
+        {/* subtle decorative circles */}
+        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full opacity-10" style={{ background: "white" }} />
+        <div className="absolute bottom-2 -left-8 w-24 h-24 rounded-full opacity-10" style={{ background: "white" }} />
+
+        <div className="relative flex items-center gap-3">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center text-[22px] font-semibold flex-shrink-0" style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(4px)" }}>
+            {profile.name.charAt(0)}
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-[24px] font-semibold tracking-tight">
+              {profile.name} <span className="text-[20px]">{profile.nationality.flag}</span>
+            </div>
+            <p className="text-[14px] text-white/90 mt-0.5 font-normal">{profile.city} · {profile.purpose} · {formatDate(profile.arrivalISO)}</p>
+          </div>
         </div>
-        <p className="text-[12px] text-white/85 mt-0.5">{profile.city} · {profile.purpose} · {formatDate(profile.arrivalISO)}</p>
-        <div className="text-center mt-5">
-          <div className="text-[44px] font-medium leading-none">{pct}%</div>
-          <div className="text-[12px] text-white/80 mt-1">Settled</div>
+
+        <div className="text-center mt-6">
+          <div className="text-[48px] font-semibold leading-none">{pct}%</div>
+          <div className="text-[13px] text-white/85 mt-1.5 font-normal">Settled</div>
         </div>
       </div>
 
