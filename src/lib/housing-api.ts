@@ -55,7 +55,7 @@ export const HOUSING_PLATFORMS: HousingPlatform[] = [
   {
     id: "facebook",
     name: "Facebook groups",
-    url: "https://www.facebook.com/search/groups/?q=housing%20netherlands",
+    url: "https://www.facebook.com/groups/search/groups_home/?q=rotterdam%20housing",
     trust: "risky",
     description: "Expat and Erasmus housing groups per city.",
     bestFor: "Last-minute rooms and sublets.",

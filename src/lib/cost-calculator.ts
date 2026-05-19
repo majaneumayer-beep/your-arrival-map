@@ -69,28 +69,30 @@ export function calculateMonthlyCosts(profile: Profile): CostBreakdown {
       color: "teal",
       note: needsDutchInsurance
         ? "basisverzekering avg 2026"
-        : "EHIC covers emergencies — schools recommend +€20/mo supplemental for full cover",
+        : "EHIC = emergencies only — most schools recommend +€20/mo supplemental",
     },
     {
       id: "bike",
       label: "Bike (recommended 🚲)",
       amount: 17,
       color: "teal",
-      note: "Swapfiets Basic — swap if broken, no deposit",
+      note: "Swapfiets Basic €17/mo — swap if broken, no deposit needed",
     },
     {
       id: "transport",
       label: "Public transport (OV)",
-      amount: 40,
+      amount: 60,
       color: "amber",
-      note: "OVpay — tap your bank card, ~€40/mo average use",
+      // NL has no monthly pass — you pay per trip via OVpay
+      // avg student uses train ~2x/week intercity + tram/bus daily = ~€60/mo realistic
+      note: "No monthly pass in NL — OVpay per trip, ~€60/mo realistic avg",
     },
     {
       id: "groceries",
       label: "Groceries",
-      amount: 220,
+      amount: 280,
       color: "teal",
-      note: "Albert Heijn / Jumbo / Lidl mix",
+      note: "Albert Heijn / Jumbo / Lidl — realistic 2026 avg",
     },
     {
       id: "phone",
